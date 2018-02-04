@@ -1,0 +1,54 @@
+---
+title: "Something fascinating"
+author: "Saurabh Mishra"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+Pre-Requisite libraries:
+1. gapminder
+2. tidyverse
+
+Working with the Gapminder dataset
+
+```{r setup, cache = FALSE, message = FALSE, warning = FALSE}
+library(gapminder)
+library(tidyverse)
+
+# Get an overview of the gapminder dataset
+str(gapminder)
+
+# Type of objects in gapminder
+class(gapminder)
+
+gapminder
+
+# Initial rows of dataset
+head(gapminder)
+
+# Last rows of dataset
+tail(gapminder)
+
+# Column names in dataset
+names(gapminder)
+
+# Number of rows
+nrow(gapminder)
+
+# Number of columns
+ncol(gapminder)
+
+# Number of rows x columns
+dim(gapminder)
+
+# statistical overview
+summary(gapminder)
+
+# visualizing dataset
+plot(lifeExp ~ year, gapminder)
+
+plot(lifeExp ~ gdpPercap, gapminder)
+
+plot(lifeExp ~ log(gdpPercap), gapminder)
+```
+

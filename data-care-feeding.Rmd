@@ -5,12 +5,11 @@ date: "`r format(Sys.Date())`"
 output: github_document
 ---
 
-###Pre-Requisite libraries:
-#1. gapminder
-#2. tidyverse
+Pre-Requisite libraries:
+1. gapminder
+2. tidyverse
 
-
-#Working with the Gapminder dataset
+Working with the Gapminder dataset
 
 ```{r setup, cache = FALSE, message = FALSE, warning = FALSE}
 
@@ -54,9 +53,9 @@ plot(lifeExp ~ gdpPercap, gapminder)
 plot(lifeExp ~ log(gdpPercap), gapminder)
 ```
 
-Data Frame Variables
+Variables of Data Frame
 
-```{r setup, cache = FALSE, message = FALSE, warning = FALSE}
+```{r cache = FALSE, message = FALSE, warning = FALSE}
 library(gapminder)
 library(tidyverse)
 
@@ -65,5 +64,22 @@ head(gapminder$lifeExp)
 summary(gapminder$lifeExp)
 
 hist(gapminder$lifeExp)
+```
+
+
+
+```{r cache = FALSE, message = FALSE, warning = FALSE}
+library(gapminder)
+library(tidyverse)
+
+## we exploit the fact that ggplot2 was installed and loaded via the tidyverse
+p <- ggplot(filter(gapminder, continent != "Oceania"),
+            aes(x = gdpPercap, y = lifeExp)) # just initializes
+p <- p + scale_x_log10() # log the x axis the right way
+p + geom_point() # scatterplot
+p + geom_point(aes(color = continent)) # map continent to color
+p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
+p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
+  geom_smooth(lwd = 1.5, se = FALSE)
 ```
 

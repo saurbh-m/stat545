@@ -147,3 +147,59 @@ plot(lifeExp ~ log(gdpPercap), gapminder)
 ```
 
 ![](data-care-feeding_files/figure-markdown_github/setup-3.png)
+
+Variables of Data Frame
+
+``` r
+library(gapminder)
+library(tidyverse)
+
+head(gapminder$lifeExp)
+```
+
+    ## [1] 28.801 30.332 31.997 34.020 36.088 38.438
+
+``` r
+summary(gapminder$lifeExp)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##   23.60   48.20   60.71   59.47   70.85   82.60
+
+``` r
+hist(gapminder$lifeExp)
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+``` r
+library(gapminder)
+library(tidyverse)
+
+## we exploit the fact that ggplot2 was installed and loaded via the tidyverse
+p <- ggplot(filter(gapminder, continent != "Oceania"),
+            aes(x = gdpPercap, y = lifeExp)) # just initializes
+p <- p + scale_x_log10() # log the x axis the right way
+p + geom_point() # scatterplot
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-2-1.png)
+
+``` r
+p + geom_point(aes(color = continent)) # map continent to color
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-2-2.png)
+
+``` r
+p + geom_point(alpha = (1/3), size = 3) + geom_smooth(lwd = 3, se = FALSE)
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-2-3.png)
+
+``` r
+p + geom_point(alpha = (1/3), size = 3) + facet_wrap(~ continent) +
+  geom_smooth(lwd = 1.5, se = FALSE)
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-2-4.png)

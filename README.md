@@ -1,1 +1,1 @@
-# Data analysis stat545
+# Data Analysis STAT545

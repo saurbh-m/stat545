@@ -148,12 +148,13 @@ plot(lifeExp ~ log(gdpPercap), gapminder)
 
 ![](data-care-feeding_files/figure-markdown_github/setup-3.png)
 
-Variables of Data Frame
+Looking at Variables of Data Frame
 
 ``` r
 library(gapminder)
 library(tidyverse)
 
+# life expectancy variable
 head(gapminder$lifeExp)
 ```
 
@@ -171,6 +172,68 @@ hist(gapminder$lifeExp)
 ```
 
 ![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-1-1.png)
+
+``` r
+# year variable
+summary(gapminder$year)
+```
+
+    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+    ##    1952    1966    1980    1980    1993    2007
+
+``` r
+table(gapminder$year)
+```
+
+    ## 
+    ## 1952 1957 1962 1967 1972 1977 1982 1987 1992 1997 2002 2007 
+    ##  142  142  142  142  142  142  142  142  142  142  142  142
+
+``` r
+# continent variable
+class(gapminder$continent)
+```
+
+    ## [1] "factor"
+
+``` r
+summary(gapminder$continent)
+```
+
+    ##   Africa Americas     Asia   Europe  Oceania 
+    ##      624      300      396      360       24
+
+``` r
+levels(gapminder$continent)
+```
+
+    ## [1] "Africa"   "Americas" "Asia"     "Europe"   "Oceania"
+
+``` r
+nlevels(gapminder$continent)
+```
+
+    ## [1] 5
+
+``` r
+str(gapminder$continent)
+```
+
+    ##  Factor w/ 5 levels "Africa","Americas",..: 3 3 3 3 3 3 3 3 3 3 ...
+
+``` r
+table(gapminder$continent)
+```
+
+    ## 
+    ##   Africa Americas     Asia   Europe  Oceania 
+    ##      624      300      396      360       24
+
+``` r
+barplot(table(gapminder$continent))
+```
+
+![](data-care-feeding_files/figure-markdown_github/unnamed-chunk-1-2.png)
 
 ``` r
 library(gapminder)

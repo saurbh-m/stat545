@@ -53,17 +53,40 @@ plot(lifeExp ~ gdpPercap, gapminder)
 plot(lifeExp ~ log(gdpPercap), gapminder)
 ```
 
-Variables of Data Frame
+Looking at Variables of Data Frame
 
 ```{r cache = FALSE, message = FALSE, warning = FALSE}
 library(gapminder)
 library(tidyverse)
 
+# life expectancy variable
 head(gapminder$lifeExp)
 
 summary(gapminder$lifeExp)
 
 hist(gapminder$lifeExp)
+
+
+# year variable
+summary(gapminder$year)
+
+table(gapminder$year)
+
+
+# continent variable
+class(gapminder$continent)
+
+summary(gapminder$continent)
+
+levels(gapminder$continent)
+
+nlevels(gapminder$continent)
+
+str(gapminder$continent)
+
+table(gapminder$continent)
+
+barplot(table(gapminder$continent))
 ```
 
 

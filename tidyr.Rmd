@@ -1,0 +1,110 @@
+---
+title: "tidyr"
+author: "Saurabh Mishra"
+date: "`r format(Sys.Date())`"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Benefits of Clean Data
+
+An important aspect of "writing data for computers" is to make your data **tidy**. Key features of **tidy** data:
+
++ Each column is a variable
++ Each row is an observation
+
+```{r}
+library(tidyverse)
+
+# This data has been formatted for consumption by human eyeballs.
+
+# The format makes it easy for a human to look up the numbers, but makes it pretty hard for a computer to pull out such counts and, more importantly, to compute on them or graph them.
+
+(fship <- read.csv("data/The_Fellowship_Of_The_Ring.csv"))
+
+(rking <- read.csv("data/The_Return_Of_The_King.csv"))
+
+(ttow <- read.csv("data/The_Two_Towers.csv"))
+
+```
+
+
+Tidy data is generally taller and narrower. It doesn't fit nicely on the page. 
+
+
+```{r}
+(lotr_tidy <- read.csv("data/lotr_tidy.csv"))
+```
+
+Certain elements get repeated alot, e.g. `Hobbit`. For these reasons, we often instinctively resist **tidy** data as inefficient or ugly.
+
+But, unless and until you're making the final product for a textual presentation of data, ignore your yearning to see the data in a compact form.
+
+Using `lotr_tidy`:-
+
++ What's the total number of words spoken by male hobbits?
++ Does a certain Race dominate a movie? Does the dominant Race differ across the movies?
+
+```{r}
+
+
+# What's the total number of words spoken by *male* *hobbits* = **8780**
+# count unique values of variables 'Gender' and 'Race', and weigh by words
+lotr_tidy %>% count(Gender, Race, wt = Words)
+
+# R native:- aggregate(Words ~ Gender, data = lotr_tidy, FUN = sum)
+
+
+# Which race dominates a movie? Does the dominant race differ across movies?
+# = hobbit dominates fellowship, and man dominates two towers
+(by_race_film <- lotr_tidy %>% 
+   group_by(Film, Race) %>% 
+   summarize(Words = sum(Words)))
+
+# R native:- (by_race_film <- aggregate(Words ~ Race * Film, data = lotr_tidy, FUN = sum))
+```
+
+
+We can stare hard at those numbers to answer the question. But even nicer is to depict the word counts we just computed in a barchart.
+
+```{r}
+p <- ggplot(by_race_film, aes(x = Film, y = Words, fill = Race))
+p + geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() + guides(fill = guide_legend(reverse = TRUE))
+```
+
+Hobbits are featured heavily in The Fellowhip of the Ring, where as Men had a lot more screen time in The Two Towers. They were equally prominent in the last movie, The Return of the King.
+
+Again, it was important to have all the data in a single data frame, all word counts in a single variable, and associated variables for Film and Race.
+
+Having the data in tidy form was a key enabler for our data aggregations and visualization.
+
+Tidy data is integral to efficient data analysis and visualization.
+
+
+## Tidying Data
+
+Step 1: Import untidy data
+
+```{r message = FALSE}
+
+(fship <- read_csv(file.path("data", "The_Fellowship_Of_The_Ring.csv")))
+
+(ttow <- read_csv(file.path("data", "The_Two_Towers.csv")))
+
+(rking <- read_csv(file.path("data", "The_Return_Of_The_King.csv")))
+
+```
+
+Step 2: Glue all the data together into one data frame, stacking them up row wise.
+
+```{r}
+(lotr_untidy <- bind_rows(fship, ttow, rking))
+```
+
+Assembling one large data object from lots of little ones is common data preparation task. When the pieces are as similar as they here, it's nice to assemble them into one object right away. In other scenarios, you may need to do some remedial work on the pieces before they can be fitted together nicely.
+
+We are still violating one of the fundamental principles of tidy data. "Word count" is a fundamental variable in our dataset and it's currently spread out over two variables, Female and Male. Conceptually, we need to gather up the word counts into a single variable and create a new variable, Gender, to track whether each count refers to females or males. We use the gather() function from the tidyr package to do this.

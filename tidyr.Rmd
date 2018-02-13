@@ -107,4 +107,44 @@ Step 2: Glue all the data together into one data frame, stacking them up row wis
 
 Assembling one large data object from lots of little ones is common data preparation task. When the pieces are as similar as they here, it's nice to assemble them into one object right away. In other scenarios, you may need to do some remedial work on the pieces before they can be fitted together nicely.
 
+Step 3: Tidy Data
+
 We are still violating one of the fundamental principles of tidy data. "Word count" is a fundamental variable in our dataset and it's currently spread out over two variables, Female and Male. Conceptually, we need to gather up the word counts into a single variable and create a new variable, Gender, to track whether each count refers to females or males. We use the gather() function from the tidyr package to do this.
+
+```{r}
+
+(lotr_tidy <-
+  gather(lotr_untidy, key = 'Gender', value = 'Words', Female, Male))
+# Tidy data ... mission accomplished!
+
+```
+
+To explain our call to gather() above, let's read it from right to left: we took the variables Female and Male and gathered their values into a single new variable Words. This forced the creation of a companion variable Gender, a key, which tells whether a specific value of Words came from Female or Male. All other variables, such as Film, remain unchanged and are simply replicated as needed.
+
+Step 4: Write tidy data to a delimited file
+
+Now we write this multi-film, tidy dataset to file for use in various downstream scripts for further analysis and visualization. This would make an excellent file to share on the web with others, providing a tool-agnostic, ready-to-analyze entry point for anyone wishing to play with this data.
+
+```{r}
+write_csv(lotr_tidy, path = file.path("data", "lotr_tidy_export.csv"))
+```
+
+It is untidy to have have data parcelled out across different files or data frames. We used dplyr::bind_rows() above to combine film-specific data frames into one large data frame.
+
+It is untidy to have a conceptual variable, e.g. "word count", spread across multiple variables, such as word counts for males and word counts for females. We used the gather() function from the tidyr package to stack up all the word counts into a single variable, create a new variable to convey male vs. female, and do the replication needed for the other variables.
+
+Many data analytic projects will benefit from a script that marshals data from different files, tidies the data, and writes a clean result to file for further analysis.
+
+Watch out for how untidy data seduces you into working with it more than you should:
+
++ Data optimized for consumption by human eyeballs is attractive, so it's hard to remember it's suboptimal for computation. How can something that looks so pretty be so wrong?
+
++ Tidy data often has lots of repetition, which triggers hand-wringing about efficiency and aesthetics. Until you can document a performance problem, keep calm and tidy on.
+
++ Tidying operations are unfamiliar to many of us and we avoid them, subconsciously preferring to faff around with other workarounds that are more familiar.
+
+
+## Untidying Data
+
+This can be useful at the end of an analysis, for preparing figures or tables.
+

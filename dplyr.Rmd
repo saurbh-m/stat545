@@ -2,7 +2,7 @@
 title: "dplyr"
 author: "Saurabh Mishra"
 date: "2/7/2018"
-output: html_document
+output: github_document
 ---
 
 ```{r setup, include=FALSE}
